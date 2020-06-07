@@ -1,0 +1,16 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && \
+    apt-get install -y apt-transport-https curl wget gnupg2
+
+RUN \
+    mkdir -p /goroot && \
+    curl https://storage.googleapis.com/golang/go1.13.linux-amd64.tar.gz | tar xvzf - -C /goroot --strip-components=1
+ENV GOROOT /goroot
+ENV PATH $GOROOT/bin:$PATH
+
+RUN wget -q -O- 'https://download.ceph.com/keys/release.asc' | apt-key add -
+RUN echo "deb https://download.ceph.com/debian-luminous xenial main" >> /etc/apt/sources.list
+
+RUN apt-get update && \
+    apt-get install -y --force-yes librados-dev librbd-dev build-essential
