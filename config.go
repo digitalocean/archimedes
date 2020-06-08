@@ -50,15 +50,15 @@ func WithMaxRecoveryPGsAllowed(val int) Option {
 	}
 }
 
-// WithTargetWeightMap passes the mapping of each
+// WithTargetCrushWeightMap passes the mapping of each
 // candidate OSD to its target CRUSH weight that it
 // hopes to reach.
 //
 // This is a required option since we cannot run the
 // reebalancer without any OSDs to reweight.
-func WithTargetWeightMap(val map[int]float64) Option {
+func WithTargetCrushWeightMap(val map[int]float64) Option {
 	return func(r *Rebalancer) {
-		r.targetWeightMap = val
+		r.targetCrushWeightMap = val
 	}
 }
 

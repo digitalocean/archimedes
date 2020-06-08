@@ -16,7 +16,7 @@ You will want to change the docker image name/endpoint based on your setup. Once
 The reweight run is initiated with the following command:
 
 ```
-docker run --rm -v /etc/ceph:/etc/ceph -it docker.digitalocean.com/ceph-rebalancer:latest --ceph-user admin reweight --target-osd-weights "1:1.4999,2:1.4999,3:7.7999" --weight-increment 0.02
+docker run --rm -v /etc/ceph:/etc/ceph -it docker.digitalocean.com/ceph-rebalancer:latest --ceph-user admin reweight --target-osd-crush-weights "1:1.4999,2:1.4999,3:7.7999" --weight-increment 0.02
 ```
 
 It is expected that `/etc/ceph` directory on the host in the above case contains both:

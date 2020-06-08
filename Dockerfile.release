@@ -10,7 +10,7 @@ ENV GOROOT /goroot
 ENV PATH $GOROOT/bin:$PATH
 
 RUN wget -q -O- 'https://download.ceph.com/keys/release.asc' | apt-key add -
-RUN echo "deb https://download.ceph.com/debian-luminous xenial main" >> /etc/apt/sources.list
+RUN echo "deb https://download.ceph.com/debian-luminous bionic main" >> /etc/apt/sources.list
 
 RUN apt-get update && \
     apt-get install -y --force-yes librados-dev librbd-dev build-essential
@@ -24,7 +24,7 @@ RUN apt-get update && \
     apt-get install -y apt-transport-https curl wget gnupg2
 
 RUN wget -q -O- 'https://download.ceph.com/keys/release.asc' | apt-key add -
-RUN echo "deb https://download.ceph.com/debian-luminous xenial main" >> /etc/apt/sources.list
+RUN echo "deb https://download.ceph.com/debian-luminous bionic main" >> /etc/apt/sources.list
 RUN apt-get update && \
     apt-get install -y --force-yes librados2 librbd1 ceph-common
 RUN rm -rf /var/lib/apt/lists/*

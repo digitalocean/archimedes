@@ -41,8 +41,8 @@ type Rebalancer struct {
 	maxBackfillPGsAllowed int
 	maxRecoveryPGsAllowed int
 
-	targetWeightMap map[int]float64
-	weightIncrement float64
+	targetCrushWeightMap map[int]float64
+	weightIncrement      float64
 
 	sleepInterval time.Duration
 	dryRun        bool
@@ -82,7 +82,7 @@ func New(opt ...Option) (*Rebalancer, error) {
 		fn(r)
 	}
 
-	if len(r.targetWeightMap) == 0 {
+	if len(r.targetCrushWeightMap) == 0 {
 		return nil, errors.New("no weight map found")
 	}
 
@@ -110,7 +110,7 @@ func (r *Rebalancer) Run(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			if len(r.targetWeightMap) <= 0 {
+			if len(r.targetCrushWeightMap) <= 0 {
 				log.Info("all given osds completed reweighting")
 				return
 			}
@@ -145,14 +145,14 @@ func (r *Rebalancer) DoReweight() {
 	}
 
 	cws := r.extractCurrentWeights()
-	for osd, tw := range r.targetWeightMap {
+	for osd, tw := range r.targetCrushWeightMap {
 		ll := log.WithField("osd", osd)
 
 		cw, ok := cws[osd]
 		if !ok {
 			ll.Error("cannot find osd in current osd tree")
 
-			delete(r.targetWeightMap, osd)
+			delete(r.targetCrushWeightMap, osd)
 			continue
 		}
 
@@ -161,7 +161,7 @@ func (r *Rebalancer) DoReweight() {
 			// target weight achieved
 			ll.Info("target weight achieved")
 
-			delete(r.targetWeightMap, osd)
+			delete(r.targetCrushWeightMap, osd)
 			continue
 		}
 
@@ -176,14 +176,14 @@ func (r *Rebalancer) DoReweight() {
 		if weight <= 0 {
 			ll.Error("0 or negative weight found")
 
-			delete(r.targetWeightMap, osd)
+			delete(r.targetCrushWeightMap, osd)
 			continue
 		}
 
 		if r.dryRun {
 			ll.Info("weight will be applied in the actual run")
 
-			delete(r.targetWeightMap, osd)
+			delete(r.targetCrushWeightMap, osd)
 			continue
 		}
 
@@ -206,7 +206,7 @@ func (r *Rebalancer) extractCurrentWeights() map[int]float64 {
 			continue
 		}
 
-		_, ok := r.targetWeightMap[node.ID]
+		_, ok := r.targetCrushWeightMap[node.ID]
 		if ok {
 			osdsToReweight[node.ID] = float64(node.CrushWeight)
 		}
@@ -237,7 +237,7 @@ func (r *Rebalancer) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(
 		r.targetOSDsDesc,
 		prometheus.GaugeValue,
-		float64(len(r.targetWeightMap)),
+		float64(len(r.targetCrushWeightMap)),
 	)
 }
 

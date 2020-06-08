@@ -65,7 +65,7 @@ var commands = []*cli.Command{
 		Flags: []cli.Flag{
 			maxBackfillPGsFlag,
 			maxRecoveryPGsFlag,
-			targetOSDsFlag,
+			targetOSDsCrushFlag,
 			weightIncrementFlag,
 			sleepDurationFlag,
 			dryRunFlag,
@@ -80,7 +80,7 @@ var commands = []*cli.Command{
 			}
 			defer cc.Close()
 
-			twMap, err := parseTargetWeightMap(ctx.String(targetOSDsFlag.Name))
+			twMap, err := parseTargetWeightMap(ctx.String(targetOSDsCrushFlag.Name))
 			if err != nil {
 				return fmt.Errorf("failed parsing target-weights: %s", err)
 			}
@@ -203,8 +203,8 @@ var (
 		Usage: "Number of maximum PGs allowed to be in recovering/recovery_wait state.",
 	}
 
-	targetOSDsFlag = &cli.StringFlag{
-		Name:  "target-osd-weights",
+	targetOSDsCrushFlag = &cli.StringFlag{
+		Name:  "target-osd-crush-weights",
 		Value: "",
 		Usage: "OSDs and CRUSH weights provided in format of: 'osd-id:weight,osd-id:weight'.",
 	}
