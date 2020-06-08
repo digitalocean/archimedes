@@ -15,8 +15,8 @@ test: build
 	docker run --rm \
 		-e GOPRIVATE=github.com/digitalocean \
 		-w $(project_path) \
-		-v $(cur_dir):/$(project_path) \
-		-it $(container_build_version) \
+		-v $(cur_dir):$(project_path) \
+		$(container_build_version) \
 		go test -v ./...
 .PHONY: test
 

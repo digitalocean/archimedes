@@ -357,7 +357,7 @@ func TestDoReweight(t *testing.T) {
 			r, err := New(
 				WithCephClient(tc),
 				WithWeightIncrement(tt.weightIncrement),
-				WithTargetWeightMap(tt.targetWeightMap),
+				WithTargetCrushWeightMap(tt.targetWeightMap),
 				WithDryRun(tt.dryRun),
 			)
 			if err != nil {

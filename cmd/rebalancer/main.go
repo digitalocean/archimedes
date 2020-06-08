@@ -89,7 +89,7 @@ var commands = []*cli.Command{
 				rebalancer.WithCephClient(cc),
 				rebalancer.WithMaxBackfillPGsAllowed(ctx.Int(maxBackfillPGsFlag.Name)),
 				rebalancer.WithMaxRecoveryPGsAllowed(ctx.Int(maxRecoveryPGsFlag.Name)),
-				rebalancer.WithTargetWeightMap(twMap),
+				rebalancer.WithTargetCrushWeightMap(twMap),
 				rebalancer.WithWeightIncrement(ctx.Float64(weightIncrementFlag.Name)),
 				rebalancer.WithSleepInterval(ctx.Duration(sleepDurationFlag.Name)),
 				rebalancer.WithDryRun(ctx.Bool(dryRunFlag.Name)),
