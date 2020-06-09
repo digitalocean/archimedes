@@ -115,7 +115,6 @@ func (r *Rebalancer) Run(ctx context.Context) {
 				return
 			}
 
-			r.crushWeightMap = map[int]float64{}
 			r.DoReweight()
 		}
 	}
@@ -126,21 +125,21 @@ func (r *Rebalancer) Run(ctx context.Context) {
 func (r *Rebalancer) DoReweight() {
 	bpgs, err := r.ceph.BackfillingPGs()
 	if err != nil {
-		log.WithError(err).Error("failed checking for backfilling osds")
+		log.WithError(err).Error("failed checking for backfilling pgs")
 		return
 	}
 	if bpgs > r.maxBackfillPGsAllowed {
-		log.WithField("backfill.pgs", bpgs).Warn("skipping reweighting, backfilling osds found")
+		log.WithField("backfill.pgs", bpgs).Warn("skipping reweighting, backfilling pgs found")
 		return
 	}
 
 	rpgs, err := r.ceph.RecoveringPGs()
 	if err != nil {
-		log.WithError(err).Error("failed checking for recovering osds")
+		log.WithError(err).Error("failed checking for recovering pgs")
 		return
 	}
 	if rpgs > r.maxRecoveryPGsAllowed {
-		log.WithField("recovery.pgs", rpgs).Warn("skipping reweighting, recovering osds found")
+		log.WithField("recovery.pgs", rpgs).Warn("skipping reweighting, recovering pgs found")
 		return
 	}
 
@@ -180,6 +179,17 @@ func (r *Rebalancer) DoReweight() {
 			continue
 		}
 
+		// If the next reweight value is the same one we set previously, that
+		// means we have achieved optimal weight. Nothing more to do here.
+		if w, ok := r.crushWeightMap[osd]; ok {
+			if w == weight {
+				ll.Info("optimal weight achieved!")
+
+				delete(r.targetCrushWeightMap, osd)
+				continue
+			}
+		}
+
 		if r.dryRun {
 			ll.Info("weight will be applied in the actual run")
 
@@ -189,7 +199,10 @@ func (r *Rebalancer) DoReweight() {
 
 		if err := r.doReweight(osd, weight); err != nil {
 			ll.WithError(err).Error("cannot reweight osd")
+			continue
 		}
+
+		ll.Info("reweight applied!")
 	}
 }
 
