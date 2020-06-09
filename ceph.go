@@ -17,6 +17,7 @@ package rebalancer
 import (
 	"encoding/json"
 	"fmt"
+	"path"
 	"strings"
 
 	"github.com/ceph/go-ceph/rados"
@@ -134,18 +135,25 @@ var _ CephClient = &cephClient{}
 // establishing a connection to ceph cluster and returning a
 // usable handle.
 func NewCephClient(user, configPath string) (CephClient, error) {
-	conn, err := rados.NewConnWithUser(user)
+	// The cluster name can always be derived from the /etc/ceph/<cluster>.conf
+	confParts := strings.SplitN(path.Base(configPath), ".", 2)
+	if len(confParts) < 2 {
+		return nil, fmt.Errorf("invalid ceph conf: %q", configPath)
+	}
+	clusterName := confParts[0]
+
+	conn, err := rados.NewConnWithClusterAndUser(clusterName, user)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cannot create conn stub (user=%q,cluster=%q): %s", user, clusterName, err)
 	}
 
 	err = conn.ReadConfigFile(configPath)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error reading config file %q: %s", configPath, err)
 	}
 
 	if err := conn.Connect(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error connecting to cluster: %s", err)
 	}
 
 	return &cephClient{
