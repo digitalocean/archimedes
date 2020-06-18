@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Build
+name: License
 on:
   push:
     branches:
@@ -21,13 +21,14 @@ on:
     branches:
       - master
 jobs:
-  test:
-    strategy:
-      matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
-    runs-on: ${{ matrix.os }}
+  build:
+    runs-on: [ubuntu-latest]
     steps:
       - name: checkout repo
         uses: actions/checkout@v1
-      - name: run test-suite
-        run: make test
+      - name: download addlicense
+        run: go get -d github.com/google/addlicense
+      - name: install addlicense
+        run: go build -o addlicense github.com/google/addlicense
+      - name: run license addition
+        run: ./addlicense -c DigitalOcean -l apache -y 2020 --check .
