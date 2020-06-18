@@ -17,7 +17,7 @@ RUN apt-get update && \
 
 WORKDIR /go/
 COPY . /go/
-RUN go build -o /bin/ceph-rebalancer /go/cmd/rebalancer/...
+RUN go build -o /bin/archimedes /go/cmd/rebalancer/...
 
 FROM ubuntu:18.04
 RUN apt-get update && \
@@ -29,8 +29,8 @@ RUN apt-get update && \
     apt-get install -y --force-yes librados2 librbd1 ceph-common
 RUN rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /bin/ceph-rebalancer /bin/ceph-rebalancer
-RUN chmod +x /bin/ceph-rebalancer
+COPY --from=builder /bin/archimedes /bin/archimedes
+RUN chmod +x /bin/archimedes
 
 EXPOSE 8928
-ENTRYPOINT ["/bin/ceph-rebalancer"]
+ENTRYPOINT ["/bin/archimedes"]

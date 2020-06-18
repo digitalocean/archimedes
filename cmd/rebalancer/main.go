@@ -25,14 +25,14 @@ import (
 	"strings"
 	"time"
 
-	rebalancer "github.com/digitalocean/ceph-rebalancer"
+	rebalancer "github.com/digitalocean/archimedes"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/urfave/cli/v2"
 )
 
 const (
-	appName = "ceph-rebalancer"
+	appName = "archimedes"
 )
 
 func main() {
@@ -95,7 +95,7 @@ var commands = []*cli.Command{
 				rebalancer.WithDryRun(ctx.Bool(dryRunFlag.Name)),
 			)
 			if err != nil {
-				return fmt.Errorf("initializing rebalancer failed: %s", err)
+				return fmt.Errorf("initializing archimedes failed: %s", err)
 			}
 
 			go func() {

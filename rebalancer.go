@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package rebalancer
+package archimedes
 
 import (
 	"context"
@@ -27,7 +27,7 @@ import (
 )
 
 const (
-	serviceName = "rebalancer"
+	serviceName = "archimedes"
 )
 const (
 	roundToPlaces = 4
