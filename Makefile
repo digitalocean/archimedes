@@ -1,7 +1,7 @@
 cur_dir           := $(abspath $(shell git rev-parse --show-toplevel))
-project_path      := /ceph-rebalancer
-release_binary    := ceph-rebalancer
-docker_container  := ceph-rebalancer
+project_path      := /archimedes
+release_binary    := archimedes
+docker_container  := archimedes
 
 container_build_version   := $(docker_container):build
 container_release_version := $(docker_container):latest
