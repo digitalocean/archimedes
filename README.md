@@ -1,5 +1,5 @@
 # archimedes
-![Build](https://github.com/digitalocean/archimedes/workflows/Build/badge.svg?branch=master) ![License](https://github.com/digitalocean/archimedes/workflows/License/badge.svg?branch=master) [![Apache License](https://img.shields.io/hexpm/l/plug)](LICENSE)
+[![GoDoc](https://godoc.org/github.com/digitalocean/archimedes?status.svg)](https://godoc.org/github.com/digitalocean/archimedes) ![Build](https://github.com/digitalocean/archimedes/workflows/Build/badge.svg?branch=master) ![License](https://github.com/digitalocean/archimedes/workflows/License/badge.svg?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/digitalocean/archimedes)](https://goreportcard.com/report/github.com/digitalocean/archimedes) [![Apache License](https://img.shields.io/hexpm/l/plug)](LICENSE)
 
 Automatic and gradual rebalancing mechanism for Ceph OSDs. This process is designed to be deployed and run as a docker container that periodically reweights given set of OSDs to their target weights. It does across multiple iterations where each iteration upweights an OSD by `--weight-increment` value. The reweights are applied to CRUSH reweight parameter of an OSD and not the OSD reweight parameter.
 
