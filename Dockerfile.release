@@ -1,16 +1,16 @@
-FROM ubuntu:18.04 as builder
+FROM ubuntu:20.04 as builder
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https curl wget gnupg2
 
 RUN \
     mkdir -p /goroot && \
-    curl https://storage.googleapis.com/golang/go1.13.linux-amd64.tar.gz | tar xvzf - -C /goroot --strip-components=1
+    curl https://storage.googleapis.com/golang/go1.17.2.linux-amd64.tar.gz | tar xvzf - -C /goroot --strip-components=1
 ENV GOROOT /goroot
 ENV PATH $GOROOT/bin:$PATH
 
 RUN wget -q -O- 'https://download.ceph.com/keys/release.asc' | apt-key add -
-RUN echo "deb https://download.ceph.com/debian-luminous bionic main" >> /etc/apt/sources.list
+RUN echo "deb https://download.ceph.com/debian-nautilus focal main" >> /etc/apt/sources.list
 
 RUN apt-get update && \
     apt-get install -y --force-yes librados-dev librbd-dev build-essential
@@ -19,12 +19,12 @@ WORKDIR /go/
 COPY . /go/
 RUN go build -o /bin/archimedes /go/cmd/rebalancer/...
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 RUN apt-get update && \
     apt-get install -y apt-transport-https curl wget gnupg2
 
 RUN wget -q -O- 'https://download.ceph.com/keys/release.asc' | apt-key add -
-RUN echo "deb https://download.ceph.com/debian-luminous bionic main" >> /etc/apt/sources.list
+RUN echo "deb https://download.ceph.com/debian-nautilus focal main" >> /etc/apt/sources.list
 RUN apt-get update && \
     apt-get install -y --force-yes librados2 librbd1 ceph-common
 RUN rm -rf /var/lib/apt/lists/*
