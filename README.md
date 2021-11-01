@@ -31,6 +31,8 @@ The runs are further customizable. We can control options like the number of PGs
 docker run --rm -it docker.digitalocean.com/archimedes:latest reweight --help
 ```
 
+Note that Ceph's balancer will try to act at the same time that Archimedes is running, and thus depending on the amount of free capacity you have you may want to disable the balancer during a reweight and enable it after. You can pass `--enable-ceph-balancer` to `reweight` to have it automatically turn the balancer on for you.
+
 ## Metrics and Logging
 
 Our code uses `logrus` for structured logging which should be visible via docker logs.

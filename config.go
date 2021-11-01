@@ -79,6 +79,14 @@ func WithSleepInterval(val time.Duration) Option {
 	}
 }
 
+// WithEnableCephBalancer indicates whether Ceph's balancer should be enabled
+// after reweights successful complete.
+func WithEnableCephBalancer(val bool) Option {
+	return func(r *Rebalancer) {
+		r.enableCephBalancer = val
+	}
+}
+
 // WithDryRun will change the mode of rebalancer. When
 // dry-run is disabled, the reweights will be actually
 // performed on the cluster.

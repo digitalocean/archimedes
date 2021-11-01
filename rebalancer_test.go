@@ -420,6 +420,10 @@ func (c *testCephClient) CrushReweight(osdID int, crushWeight float64) error {
 	return nil
 }
 
+func (c *testCephClient) EnableCephBalancer() error {
+	return nil
+}
+
 func (c *testCephClient) Close() {
 	return
 }

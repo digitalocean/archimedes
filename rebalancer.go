@@ -44,8 +44,9 @@ type Rebalancer struct {
 	targetCrushWeightMap map[int]float64
 	weightIncrement      float64
 
-	sleepInterval time.Duration
-	dryRun        bool
+	sleepInterval      time.Duration
+	enableCephBalancer bool
+	dryRun             bool
 
 	crushWeightMap  map[int]float64
 	crushWeightDesc *prometheus.Desc
@@ -112,6 +113,13 @@ func (r *Rebalancer) Run(ctx context.Context) {
 		case <-ticker.C:
 			if len(r.targetCrushWeightMap) <= 0 {
 				log.Info("all given osds completed reweighting")
+				if r.enableCephBalancer && !r.dryRun {
+					log.Info("enabling the Ceph balancer")
+					err := r.ceph.EnableCephBalancer()
+					if err != nil {
+						log.WithError(err).Warn("failed to enable the Ceph balancer after upweight completion")
+					}
+				}
 				return
 			}
 

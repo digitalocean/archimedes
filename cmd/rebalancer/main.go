@@ -68,6 +68,7 @@ var commands = []*cli.Command{
 			targetOSDsCrushFlag,
 			weightIncrementFlag,
 			sleepDurationFlag,
+			enableCephBalancerFlag,
 			dryRunFlag,
 		},
 		Action: func(ctx *cli.Context) error {
@@ -92,6 +93,7 @@ var commands = []*cli.Command{
 				rebalancer.WithTargetCrushWeightMap(twMap),
 				rebalancer.WithWeightIncrement(ctx.Float64(weightIncrementFlag.Name)),
 				rebalancer.WithSleepInterval(ctx.Duration(sleepDurationFlag.Name)),
+				rebalancer.WithEnableCephBalancer(ctx.Bool(enableCephBalancerFlag.Name)),
 				rebalancer.WithDryRun(ctx.Bool(dryRunFlag.Name)),
 			)
 			if err != nil {
@@ -219,6 +221,12 @@ var (
 		Name:  "sleep-duration",
 		Value: 5 * time.Minute,
 		Usage: "The amount of time to sleep between each iteration of reweight run.",
+	}
+
+	enableCephBalancerFlag = &cli.BoolFlag{
+		Name:  "enable-ceph-balancer",
+		Value: false,
+		Usage: "Enable the Ceph balancer after reweights successfully complete.",
 	}
 
 	dryRunFlag = &cli.BoolFlag{

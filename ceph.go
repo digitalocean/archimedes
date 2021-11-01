@@ -41,6 +41,9 @@ type CephClient interface {
 	// value provided.
 	CrushReweight(osdID int, crushWeight float64) error
 
+	// EnableCephBalancer enables the Ceph balancer.
+	EnableCephBalancer() error
+
 	// Close is used to disconnect Ceph connection once used.
 	Close()
 }
@@ -121,6 +124,18 @@ func (c *cephClient) CrushReweight(osdID int, crushWeight float64) error {
 	}
 
 	_, _, err = c.conn.MonCommand(cmd)
+	return err
+}
+
+func (c *cephClient) EnableCephBalancer() error {
+	cmd, err := json.Marshal(map[string]interface{}{
+		"prefix": "balancer on",
+	})
+	if err != nil {
+		return err
+	}
+
+	_, _, err = c.conn.MgrCommand([][]byte{cmd})
 	return err
 }
 
