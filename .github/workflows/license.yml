@@ -22,13 +22,17 @@ on:
       - master
 jobs:
   build:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - name: checkout repo
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+      - name: set up go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.2
       - name: download addlicense
         run: go get -d github.com/google/addlicense
       - name: install addlicense
         run: go build -o addlicense github.com/google/addlicense
       - name: run license addition
-        run: ./addlicense -c DigitalOcean -l apache -y 2020 --check .
+        run: ./addlicense -c DigitalOcean -l apache -y 2021 --check .

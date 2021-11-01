@@ -47,7 +47,7 @@ curl http://localhost:8928/metrics
 
 ## Development
 
-The code is written in Golang and compatibility is tested with v1.13+ runtimes.
+The code is written in Golang and compatibility is tested with v1.17.2+ runtimes.
 
 There is a helper Makefile included to assist with needs of testing. Running the `test` target should build and run the slew of tests to make sure our new changes are safe.
 
