@@ -1,3 +1,6 @@
+# Archived
+Note: This project is no longer maintained
+
 # archimedes
 [![GoDoc](https://godoc.org/github.com/digitalocean/archimedes?status.svg)](https://godoc.org/github.com/digitalocean/archimedes) ![Build](https://github.com/digitalocean/archimedes/workflows/Build/badge.svg?branch=master) ![License](https://github.com/digitalocean/archimedes/workflows/License/badge.svg?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/digitalocean/archimedes)](https://goreportcard.com/report/github.com/digitalocean/archimedes) [![Apache License](https://img.shields.io/hexpm/l/plug)](LICENSE)
 
